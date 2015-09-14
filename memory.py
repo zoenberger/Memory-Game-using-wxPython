@@ -73,6 +73,7 @@ class MemoryGame(wx.Frame):
         
         if self.clickCount == 1:
             self.card1 = newCard #put into holding space if 1st click
+            self.card1.Unbind(wx.EVT_LEFT_DOWN)
         
         else:
             #FOUND MATCH: Unbind click events. Update match tracker
@@ -81,12 +82,14 @@ class MemoryGame(wx.Frame):
                     if findItem.GetName() == newCard.GetName():
                         findItem.Unbind(wx.EVT_LEFT_DOWN)
                 self.foundMatches += 1
+                print(self.foundMatches)
             else:  
                 #NO MATCH: Wait then hide both cards again.              
-                time.sleep(1.5) #This basically freezes screen, but clicks still captured.
+                time.sleep(1) #This basically freezes screen, but clicks still captured.
                 blankCard = wx.Image('card.jpg', wx.BITMAP_TYPE_ANY)
                 newCard.SetBitmap(wx.BitmapFromImage(blankCard))
                 self.card1.SetBitmap(wx.BitmapFromImage(blankCard))
+                self.card1.Bind(wx.EVT_LEFT_DOWN, self.onClick)
             self.clickCount = 0
         
         if self.foundMatches == self.numPairs:
