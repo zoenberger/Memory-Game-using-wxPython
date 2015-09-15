@@ -50,17 +50,21 @@ class MemoryGame(wx.Frame):
             
       
         #Visual Layout
-        vbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
         gs = wx.GridSizer(4, 6, 15, 15)
         gs.AddMany(self.blankCards)       
-        vbox.Add(gs, proportion=0, flag = wx.LEFT | wx.TOP, border = 10)
-
-        self.panel.SetSizer(vbox)
+        hbox.Add(gs, proportion=0, flag = wx.LEFT | wx.TOP, border = 10)
+        
+        title = wx.StaticText(self.panel, label="Memory Game")
+        hbox.Add(title,proportion=1, flag = wx.LEFT | wx.TOP | wx.RIGHT | wx.EXPAND, border = 10)
+        
+        self.panel.SetSizer(hbox)
         self.Show()
         
         self.foundMatches= 0 #Keeps track to see if you've won.
         self.clickCount = 0 #keeps track of 1st or second click.
         self.card1 = '' #holding spot if it's first click
+        self.totalTries = 0
 
     #----------------------------------------------------------------------
     def onClick(self, event):
@@ -77,6 +81,7 @@ class MemoryGame(wx.Frame):
         
         else:
             #FOUND MATCH: Unbind click events. Update match tracker
+            self.totalTries += 1
             if (newCard.GetName() == self.card1.GetName()):
                 for findItem in self.blankCards:
                     if findItem.GetName() == newCard.GetName():
@@ -94,6 +99,7 @@ class MemoryGame(wx.Frame):
         
         if self.foundMatches == self.numPairs:
             Winner()
+            print("Total Tries = " + str(self.totalTries))
             
           
 #NOTE: Make the winning more exciting. Hahahaha
